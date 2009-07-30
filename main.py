@@ -1,6 +1,3 @@
-import psyco
-psyco.full()
-
 import consensus
 
 def consensusformat(source):
@@ -40,10 +37,7 @@ def initsuggest(source):
     for n, k in enumerate(repoids):
         items[n] = k
     
-    #suggest.SUGGEST_EstimateAlpha(nusers, nitems, ntrans, users, items, 40, 10)
-    # == .2
-    
-    rhandle = suggest.SUGGEST_Init(nusers, nitems, ntrans, users, items, 2, 40, .2)
+    rhandle = suggest.SUGGEST_Init(nusers, nitems, ntrans, users, items, 2, 1, .4)
     
     baskets = {}
     for user, repo in getdata():
@@ -66,11 +60,14 @@ def recsuggest((rhandle, baskets), userid):
 def harness(init, recommend):
     data = getdata()
     handle = init(data)
-    fh = file('results.txt', 'w')
+    fh = file('results2.txt', 'w')
     for line in file('download/test.txt'):
-        recs = recommend(handle, line.strip())
+        try:
+            recs = recommend(handle, line.strip())
+        except KeyError:
+            recs = []
         out = '%s:%s\n' % (line.strip(), ','.join(recs))
-        print out
+        print out.strip()
         fh.write(out)
         fh.flush()
 
@@ -84,5 +81,6 @@ def trysuggest():
     return harness(initsuggest, recsuggest)
 
 if __name__ == "__main__":
-    import suggest
-    trysuggest()
+    #import suggest
+    #trysuggest()
+    tryconsensus()
