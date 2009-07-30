@@ -40,7 +40,10 @@ def initsuggest(source):
     for n, k in enumerate(repoids):
         items[n] = k
     
-    rhandle = suggest.SUGGEST_Init(nusers, nitems, ntrans, users, items, 2, 1, .4)
+    #suggest.SUGGEST_EstimateAlpha(nusers, nitems, ntrans, users, items, 40, 10)
+    # == .2
+    
+    rhandle = suggest.SUGGEST_Init(nusers, nitems, ntrans, users, items, 2, 40, .2)
     
     baskets = {}
     for user, repo in getdata():
